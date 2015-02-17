@@ -76,4 +76,17 @@ void loop() {
     digitalWrite(9, HIGH); //temp is fine, shut fan off
   }
 
+  /* debugging
+    Serial.print("Humidity: "); 
+  Serial.print(h);
+  Serial.print(" %\t");
+  Serial.print("Temperature: "); 
+  Serial.print(t);
+  Serial.print(" *C ");
+  Serial.print(f);
+  Serial.print(" *F\t");
+  Serial.print("Heat index: ");
+  Serial.print(hi);
+  Serial.println(" *F");
+  */
 }
