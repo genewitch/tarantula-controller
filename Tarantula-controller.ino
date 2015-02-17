@@ -11,16 +11,17 @@ Adafruit_NeoPixel pixels = Adafruit_NeoPixel(2, PIN, NEO_GRB + NEO_KHZ800);
 
 
 void setup() {
-  // put your setup code here, to run once:
-  pinMode(13, OUTPUT);
-  pinMode(8, OUTPUT);
-  pinMode(9, OUTPUT);
+  pinMode(8, OUTPUT); //relay 1 - heater
+  pinMode(9, OUTPUT); //relay 2 - exhaust fan
+  /* for debugging
   Serial.begin(9600);
   Serial.println("DHTxx test!");
+  */
   dht.begin();
   pixels.begin();
-  digitalWrite(8, HIGH);
-  digitalWrite(9, HIGH);
+  
+  digitalWrite(8, HIGH); //set relays to OFF
+  digitalWrite(9, HIGH); //set relays to OFF
 }
 
 void loop() {
@@ -41,37 +42,38 @@ void loop() {
     return;
   }
 
-  // Compute heat index
-  // Must send in temp in Fahrenheit!
-  //float hi = dht.computeHeatIndex(f, h);
   if (h < 75) {
     pixels.setPixelColor(1, pixels.Color(250,0,20));
     pixels.show();
-    digitalWrite(8, LOW);
+    digitalWrite(8, LOW); //turn heater relay ON
   }
   else if (h > 85) {
     pixels.setPixelColor(1, pixels.Color(255,255,0));
     pixels.show();
+    digitalWrite(9, LOW); //turn fan relay ON
   }
   else {
     pixels.setPixelColor(1, pixels.Color(20,150,0));
     pixels.show();
-    digitalWrite(8, HIGH);
+    digitalWrite(8, HIGH); //turn heater relay OFF (humidity is fine!)
+    // the next conditional may turn the heater back on, though.
   }
   
   if (f < 72) {
     pixels.setPixelColor(0, pixels.Color(239,40,22));
     pixels.show();
-    digitalWrite(8, LOW);
+    digitalWrite(8, LOW); //turn heater on
   }
   else if (f > 85) {
     pixels.setPixelColor(0, pixels.Color(51,255,51));
     pixels.show();
-    digitalWrite(9,LOW);
+    digitalWrite(9,LOW); //Too hot, turn fan on
+    digitalWrite(8, HIGH); //too hot turn heater off
   }
   else {
     pixels.setPixelColor(0, pixels.Color(0,150,20));
     pixels.show();
-    digitalWrite(9, HIGH);
+    digitalWrite(9, HIGH); //temp is fine, shut fan off
   }
-}    
+
+}
